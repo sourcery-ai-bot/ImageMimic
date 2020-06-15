@@ -192,16 +192,16 @@ imwrite(E, output_path);
 def process(src_path, dst_path):
     src = im.load(src_path)
 
-    if a.operation == "grayscale":
-        dst = grayscale(src)
-    elif a.operation == "resize":
-        dst = resize(src)
-    elif a.operation == "blank":
+    if a.operation == "blank":
         dst = blank(src)
     elif a.operation == "combine":
         dst = combine(src, src_path)
     elif a.operation == "edges":
         dst = edges(src)
+    elif a.operation == "grayscale":
+        dst = grayscale(src)
+    elif a.operation == "resize":
+        dst = resize(src)
     else:
         raise Exception("invalid operation")
 
@@ -221,11 +221,7 @@ def complete():
         now = time.time()
         elapsed = now - start
         rate = num_complete / elapsed
-        if rate > 0:
-            remaining = (total - num_complete) / rate
-        else:
-            remaining = 0
-
+        remaining = (total - num_complete) / rate if rate > 0 else 0
         print("%d/%d complete  %0.2f images/sec  %dm%ds elapsed  %dm%ds remaining" % (num_complete, total, rate, elapsed // 60, elapsed % 60, remaining // 60, remaining % 60))
 
         last_complete = now

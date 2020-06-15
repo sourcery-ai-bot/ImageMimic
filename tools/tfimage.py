@@ -114,7 +114,7 @@ def find(d):
     result = []
     for filename in os.listdir(d):
         _, ext = os.path.splitext(filename.lower())
-        if ext == ".jpg" or ext == ".png":
+        if ext in [".jpg", ".png"]:
             result.append(os.path.join(d, filename))
     result.sort()
     return result

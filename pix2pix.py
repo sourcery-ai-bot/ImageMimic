@@ -102,8 +102,7 @@ def augment(image, brightness):
     a_chan, b_chan = tf.unstack(image, axis=3)
     L_chan = tf.squeeze(brightness, axis=3)
     lab = deprocess_lab(L_chan, a_chan, b_chan)
-    rgb = lab_to_rgb(lab)
-    return rgb
+    return lab_to_rgb(lab)
 
 
 ########################################################################################################################
@@ -119,8 +118,9 @@ def conv(batch_input, out_channels, stride):
         # [batch, in_height, in_width, in_channels], [filter_width, filter_height, in_channels, out_channels]
         #     => [batch, out_height, out_width, out_channels]
         padded_input = tf.pad(batch_input, [[0, 0], [1, 1], [1, 1], [0, 0]], mode="CONSTANT")
-        conv = tf.nn.conv2d(padded_input, filter, [1, stride, stride, 1], padding="VALID")
-        return conv
+        return tf.nn.conv2d(
+            padded_input, filter, [1, stride, stride, 1], padding="VALID"
+        )
 
 
 # Leaky Rectified Linear Unit element
@@ -148,8 +148,14 @@ def batchnorm(input):
                                 initializer=tf.random_normal_initializer(1.0, 0.02))
         mean, variance = tf.nn.moments(input, axes=[0, 1, 2], keep_dims=False)
         variance_epsilon = 1e-5
-        normalized = tf.nn.batch_normalization(input, mean, variance, offset, scale, variance_epsilon=variance_epsilon)
-        return normalized
+        return tf.nn.batch_normalization(
+            input,
+            mean,
+            variance,
+            offset,
+            scale,
+            variance_epsilon=variance_epsilon,
+        )
 
 
 # Deconvolution element

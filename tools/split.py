@@ -22,8 +22,7 @@ def main():
     files = glob.glob(os.path.join(a.dir, "*.png"))
     files.sort()
 
-    assignments = []
-    assignments.extend(["train"] * int(a.train_frac * len(files)))
+    assignments = list(["train"] * int(a.train_frac * len(files)))
     assignments.extend(["test"] * int(a.test_frac * len(files)))
     assignments.extend(["val"] * int(len(files) - len(assignments)))
 
